@@ -2,6 +2,7 @@ package main.java.game.executionnodes;
 
 import main.java.game.Robot;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -14,7 +15,7 @@ public class ProgramNode implements Iterable<StatementNode>, RobotProgramNode {
         if(statements == null)
             this.statements = Collections.emptyList();
         else
-            this.statements = statements;
+            this.statements = new ArrayList<>(statements);
     }
 
     @Override

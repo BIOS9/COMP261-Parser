@@ -2,6 +2,7 @@ package main.java.game.executionnodes;
 
 import main.java.game.Robot;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -16,7 +17,7 @@ public class BlockNode implements Iterable<StatementNode>, RobotProgramNode {
         if(statements.size() < 1)
             throw new IllegalArgumentException("Statements must have at least one statement.");
 
-        this.statements = statements;
+        this.statements = new ArrayList<>(statements);
     }
 
     @Override
