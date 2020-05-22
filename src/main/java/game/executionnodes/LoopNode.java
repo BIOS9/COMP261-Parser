@@ -2,7 +2,7 @@ package main.java.game.executionnodes;
 
 import main.java.game.Robot;
 
-public class LoopNode implements RobotProgramNode {
+public class LoopNode extends StatementNode implements RobotProgramNode {
     public final BlockNode block;
 
     public LoopNode(BlockNode block) {

@@ -2,10 +2,7 @@ package main.java.game.executionnodes;
 
 import main.java.game.Robot;
 
-public class StatementNode implements RobotProgramNode {
+public abstract class StatementNode implements RobotProgramNode {
     @Override
-    public void execute(Robot robot) {
-        if (robot == null)
-            throw new IllegalArgumentException("Robot cannot be null.");
-    }
+    public abstract void execute(Robot robot);
 }
