@@ -20,11 +20,16 @@ public class ActionNode implements RobotProgramNode {
     public final Action action;
 
     public ActionNode(Action action) {
+        if(action == null)
+            throw new IllegalArgumentException("Action cannot be null.");
         this.action = action;
     }
 
     @Override
     public void execute(Robot robot) {
+        if(robot == null)
+            throw new IllegalArgumentException("Robot cannot be null.");
+
         switch (action) {
             case TURN_LEFT:
                 robot.turnLeft();
@@ -45,5 +50,12 @@ public class ActionNode implements RobotProgramNode {
                 robot.idleWait();
                 break;
         }
+    }
+
+    @Override
+    public String toString() {
+        return "Action{" +
+                "action=" + action +
+                '}';
     }
 }
