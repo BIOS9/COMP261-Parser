@@ -1,6 +1,6 @@
 package main.java.parser;
 
-import main.java.game.executionnodes.RobotProgramNode;
+import main.java.game.executionnodes.*;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -80,22 +80,73 @@ public class Parser {
 
 	// Useful Patterns
 
-	static Pattern NUMPAT = Pattern.compile("-?\\d+"); // ("-?(0|[1-9][0-9]*)");
-	static Pattern OPENPAREN = Pattern.compile("\\(");
-	static Pattern CLOSEPAREN = Pattern.compile("\\)");
-	static Pattern OPENBRACE = Pattern.compile("\\{");
-	static Pattern CLOSEBRACE = Pattern.compile("\\}");
+	static final Pattern NUMPAT = Pattern.compile("-?\\d+"); // ("-?(0|[1-9][0-9]*)");
+	static final Pattern OPENPAREN = Pattern.compile("\\(");
+	static final Pattern CLOSEPAREN = Pattern.compile("\\)");
+	static final Pattern OPENBRACE = Pattern.compile("\\{");
+	static final Pattern CLOSEBRACE = Pattern.compile("\\}");
+	static final Pattern SEMICOLON = Pattern.compile(";");
+
+	static final Pattern MOVE = Pattern.compile("move");
+	static final Pattern TURNL = Pattern.compile("turnL");
+	static final Pattern TURNR = Pattern.compile("turnR");
+	static final Pattern WAIT = Pattern.compile("wait");
+	static final Pattern LOOP = Pattern.compile("loop");
+	static final Pattern TAKEFUEL = Pattern.compile("takeFuel");
 
 	/**
 	 * PROG ::= STMT+
 	 */
 	static RobotProgramNode parseProgram(Scanner s) {
-		// THE PARSER GOES HERE
+		List<StatementNode> statementNodes = new ArrayList<>();
 
 		while (s.hasNext()) {
-			System.out.println(s.next());
+			StatementNode statement = parseStatement(s);
+			if(statement == null)
+				fail("Statement cannot be null", s);
+			statementNodes.add(statement);
 		}
 
+		return new ProgramNode(statementNodes);
+	}
+
+	static StatementNode parseStatement(Scanner s) {
+		if(checkFor(MOVE, s)) {
+			require(SEMICOLON, "Expected semicolon.", s);
+			return new ActionNode(ActionNode.Action.MOVE_FORWARD);
+		} else if(checkFor(TURNL, s)) {
+			require(SEMICOLON, "Expected semicolon.", s);
+			return new ActionNode(ActionNode.Action.TURN_LEFT);
+		} else if(checkFor(TURNR, s)) {
+			require(SEMICOLON, "Expected semicolon.", s);
+			return new ActionNode(ActionNode.Action.TURN_RIGHT);
+		} else if(checkFor(WAIT, s)) {
+			require(SEMICOLON, "Expected semicolon.", s);
+			return new ActionNode(ActionNode.Action.WAIT);
+		} else if(checkFor(TAKEFUEL, s)) {
+			require(SEMICOLON, "Expected semicolon.", s);
+			return new ActionNode(ActionNode.Action.TAKE_FUEL);
+		} else if(checkFor(LOOP, s)) {
+			return new LoopNode(parseBlock(s));
+		} else {
+			fail("Expected next token to be statement", s);
+			return null;
+		}
+	}
+
+	static BlockNode parseBlock(Scanner s) {
+		List<StatementNode> statements = new ArrayList<>();
+
+		require(OPENBRACE, "Expected open curly brace for block section.", s);
+
+		while (s.hasNext()) {
+			if(checkFor(CLOSEBRACE, s))
+				return new BlockNode(statements);
+
+			statements.add(parseStatement(s));
+		}
+
+		fail("End of file reached with open block. Expected \"}\"", s);
 		return null;
 	}
 
