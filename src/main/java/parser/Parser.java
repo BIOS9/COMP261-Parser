@@ -92,6 +92,10 @@ public class Parser {
 	static RobotProgramNode parseProgram(Scanner s) {
 		// THE PARSER GOES HERE
 
+		while (s.hasNext()) {
+			System.out.println(s.next());
+		}
+
 		return null;
 	}
 
