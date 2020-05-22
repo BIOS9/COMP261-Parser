@@ -20,7 +20,7 @@ public class WhileNode extends StatementNode {
         if (robot == null)
             throw new IllegalArgumentException("Robot cannot be null.");
 
-        while (condition.isTrue(robot)) {
+        while (condition.evaluate(robot)) {
             block.execute(robot);
         }
     }

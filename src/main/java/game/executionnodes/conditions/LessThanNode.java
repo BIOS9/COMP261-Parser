@@ -20,7 +20,7 @@ public class LessThanNode extends ConditionNode {
     }
 
     @Override
-    public boolean isTrue(Robot robot) {
+    public boolean evaluate(Robot robot) {
         if(robot == null)
             throw new IllegalArgumentException("Robot cannot be null.");
 
@@ -29,9 +29,9 @@ public class LessThanNode extends ConditionNode {
 
     public static LessThanNode parse(Scanner s) {
         Parser.require(Parser.OPENPAREN, "Expected open parentheses.", s);
-        NumberNode number1 = NumberNode.parse(s);
+        NumberNode number1 = NumberNode.parse(s, false);
         Parser.require(Parser.COMMA, "Expected comma.", s);
-        NumberNode number2 = NumberNode.parse(s);
+        NumberNode number2 = NumberNode.parse(s, true);
         Parser.require(Parser.CLOSEPAREN, "Expected close parentheses.", s);
         return new LessThanNode(number1, number2);
     }

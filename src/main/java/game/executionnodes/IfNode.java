@@ -25,7 +25,7 @@ public class IfNode extends StatementNode {
         if (robot == null)
             throw new IllegalArgumentException("Robot cannot be null.");
 
-        if(condition.isTrue(robot)) {
+        if(condition.evaluate(robot)) {
             block.execute(robot);
         }
     }

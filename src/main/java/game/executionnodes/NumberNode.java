@@ -28,10 +28,17 @@ public class NumberNode {
         return sensor.getValue(robot);
     }
 
-    public static NumberNode parse(Scanner s) {
-        if (s.hasNext(Parser.NUMPAT))
-            return new NumberNode(Integer.parseInt(s.next()));
-        return new NumberNode(SensorNode.parse(s));
+    public static NumberNode parse(Scanner s, boolean fixedNumber) {
+        if(fixedNumber) {
+            if (s.hasNext(Parser.NUMPAT))
+                return new NumberNode(Integer.parseInt(s.next()));
+            else {
+                Parser.fail("Invalid fixed integer.", s);
+                return null;
+            }
+        } else {
+            return new NumberNode(SensorNode.parse(s));
+        }
     }
 
     @Override

@@ -13,7 +13,7 @@ public abstract class ConditionNode {
             GREATERTHAN = Pattern.compile("gt"),
             LESSTHAN = Pattern.compile("lt");
 
-    public abstract boolean isTrue(Robot robot);
+    public abstract boolean evaluate(Robot robot);
 
     public static ConditionNode parse(Scanner s) {
         if (Parser.checkFor(EQUALS, s)) {
