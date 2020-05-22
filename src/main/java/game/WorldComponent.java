@@ -37,7 +37,7 @@ public class WorldComponent extends JComponent {
 		setPreferredSize(new Dimension(600, 600));
 
 		try {
-			fuelImage = ImageIO.read(new File("assets/fuel.png"));
+			fuelImage = ImageIO.read(getClass().getResource("/resources/fuel.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
