@@ -1,4 +1,6 @@
-package main.java;
+package main.java.parser;
+
+import main.java.game.RobotProgramNode;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -16,7 +18,7 @@ public class Parser {
 	/**
 	 * Top level parse method, called by the World
 	 */
-	static RobotProgramNode parseFile(File code) {
+	public static RobotProgramNode parseFile(File code) {
 		Scanner scan = null;
 		try {
 			scan = new Scanner(code);

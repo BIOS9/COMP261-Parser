@@ -1,4 +1,4 @@
-package main.java;
+package main.java.game;
 
 @SuppressWarnings("serial")
 public class RobotInterruptedException extends RuntimeException {

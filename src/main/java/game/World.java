@@ -1,4 +1,6 @@
-package main.java;
+package main.java.game;
+
+import main.java.parser.Parser;
 
 import java.awt.Point;
 import java.io.File;

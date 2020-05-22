@@ -1,4 +1,4 @@
-package main.java;
+package main.java.parser;
 
 @SuppressWarnings("serial")
 public class ParserFailureException extends RuntimeException {

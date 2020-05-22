@@ -1,9 +1,9 @@
-package main.java;
+package main.java.game;
 /**
  * Interface for all nodes that can be executed,
  * including the top level program node
  */
 
-interface RobotProgramNode {
+public interface RobotProgramNode {
 	public void execute(Robot robot);
 }

@@ -1,15 +1,9 @@
-package main.java;
+package main.java.game;
 
 import java.awt.BorderLayout;
-import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.List;
 
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
