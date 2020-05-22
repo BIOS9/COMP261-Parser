@@ -1,11 +1,10 @@
 package main.java.game.executionnodes;
 
 import main.java.game.Robot;
+import main.java.parser.Parser;
+import main.java.parser.ParserFailureException;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Stream;
 
 public class ProgramNode implements Iterable<StatementNode>, RobotProgramNode {
@@ -25,6 +24,23 @@ public class ProgramNode implements Iterable<StatementNode>, RobotProgramNode {
 
         for(StatementNode statement : this) {
             statement.execute(robot);
+        }
+    }
+
+    public static ProgramNode parse(Scanner s) {
+        try {
+            List<StatementNode> statementNodes = new ArrayList<>();
+
+            while (s.hasNext()) {
+                StatementNode statement = StatementNode.parse(s);
+                if (statement == null)
+                    Parser.fail("Statement cannot be null", s);
+                statementNodes.add(statement);
+            }
+
+            return new ProgramNode(statementNodes);
+        } catch (IllegalArgumentException ex) {
+            throw new ParserFailureException(ex.getMessage());
         }
     }
 

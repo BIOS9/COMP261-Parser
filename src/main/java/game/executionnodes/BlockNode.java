@@ -1,11 +1,9 @@
 package main.java.game.executionnodes;
 
 import main.java.game.Robot;
+import main.java.parser.Parser;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Stream;
 
 public class BlockNode implements Iterable<StatementNode>, RobotProgramNode {
@@ -28,6 +26,22 @@ public class BlockNode implements Iterable<StatementNode>, RobotProgramNode {
         for(StatementNode statement : this) {
             statement.execute(robot);
         }
+    }
+
+    public static BlockNode parse(Scanner s) {
+        List<StatementNode> statements = new ArrayList<>();
+
+        Parser.require(Parser.OPENBRACE, "Expected open curly brace for block section.", s);
+
+        while (s.hasNext()) {
+            if (Parser.checkFor(Parser.CLOSEBRACE, s))
+                return new BlockNode(statements);
+
+            statements.add(StatementNode.parse(s));
+        }
+
+        Parser.fail("End of file reached with open block. Expected \"}\"", s);
+        return null;
     }
 
     public List<StatementNode> getStatements() {
