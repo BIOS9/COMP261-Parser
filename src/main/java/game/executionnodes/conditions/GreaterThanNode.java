@@ -1,16 +1,39 @@
 package main.java.game.executionnodes.conditions;
 
-public class GreaterThanNode extends ConditionNode {
-    public final int number1, number2;
+import main.java.game.Robot;
+import main.java.game.executionnodes.NumberNode;
+import main.java.parser.Parser;
 
-    public GreaterThanNode(int number1, int number2) {
+import java.util.Scanner;
+
+public class GreaterThanNode extends ConditionNode {
+    public final NumberNode number1, number2;
+
+    public GreaterThanNode(NumberNode number1, NumberNode number2) {
+        if(number1 == null)
+            throw new IllegalArgumentException("Number1 cannot be null.");
+        if(number2 == null)
+            throw new IllegalArgumentException("Number2 cannot be null.");
+
         this.number1 = number1;
         this.number2 = number2;
     }
 
     @Override
-    public boolean isTrue() {
-        return number1 > number2;
+    public boolean isTrue(Robot robot) {
+        if(robot == null)
+            throw new IllegalArgumentException("Robot cannot be null.");
+
+        return number1.getValue(robot) > number2.getValue(robot);
+    }
+
+    public static GreaterThanNode parse(Scanner s) {
+        Parser.require(Parser.OPENPAREN, "Expected open parentheses.", s);
+        NumberNode number1 = NumberNode.parse(s);
+        Parser.require(Parser.COMMA, "Expected comma.", s);
+        NumberNode number2 = NumberNode.parse(s);
+        Parser.require(Parser.CLOSEPAREN, "Expected close parentheses.", s);
+        return new GreaterThanNode(number1, number2);
     }
 
     @Override

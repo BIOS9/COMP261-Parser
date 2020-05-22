@@ -2,6 +2,8 @@ package main.java.game.executionnodes;
 
 import main.java.game.Robot;
 
+import java.util.Scanner;
+
 public class LoopNode extends StatementNode {
     public final BlockNode block;
 
@@ -19,6 +21,10 @@ public class LoopNode extends StatementNode {
         while (!robot.isDead()) {
             block.execute(robot);
         }
+    }
+
+    public static LoopNode parse(Scanner s) {
+        return new LoopNode(BlockNode.parse(s));
     }
 
     @Override

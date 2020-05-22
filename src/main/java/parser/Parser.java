@@ -88,6 +88,7 @@ public class Parser {
     public static final Pattern OPENBRACE = Pattern.compile("\\{");
     public static final Pattern CLOSEBRACE = Pattern.compile("\\}");
     public static final Pattern SEMICOLON = Pattern.compile(";");
+    public static final Pattern COMMA = Pattern.compile(",");
 
     /**
      * Report a failure in the parser.

@@ -14,7 +14,9 @@ public class ActionNode extends StatementNode {
         TURN_AROUND,
         MOVE_FORWARD,
         TAKE_FUEL,
-        WAIT
+        WAIT,
+        SHIELD_ON,
+        SHIELD_OFF
     }
 
     public final Action action;
@@ -48,6 +50,12 @@ public class ActionNode extends StatementNode {
                 break;
             case WAIT:
                 robot.idleWait();
+                break;
+            case SHIELD_ON:
+                robot.setShield(true);
+                break;
+            case SHIELD_OFF:
+                robot.setShield(false);
                 break;
         }
     }

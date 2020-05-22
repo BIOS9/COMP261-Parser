@@ -12,9 +12,14 @@ public abstract class StatementNode implements RobotProgramNode {
             MOVE = Pattern.compile("move"),
             TURNL = Pattern.compile("turnL"),
             TURNR = Pattern.compile("turnR"),
+            TURNAROUND = Pattern.compile("turnAround"),
             WAIT = Pattern.compile("wait"),
+            TAKEFUEL = Pattern.compile("takeFuel"),
+            SHIELDON = Pattern.compile("shieldOn"),
+            SHIELDOFF = Pattern.compile("shieldOff"),
             LOOP = Pattern.compile("loop"),
-            TAKEFUEL = Pattern.compile("takeFuel");
+            IF = Pattern.compile("if"),
+            WHILE = Pattern.compile("while");
 
     @Override
     public abstract void execute(Robot robot);
@@ -35,8 +40,21 @@ public abstract class StatementNode implements RobotProgramNode {
         } else if (Parser.checkFor(TAKEFUEL, s)) {
             Parser.require(Parser.SEMICOLON, "Expected semicolon.", s);
             return new ActionNode(ActionNode.Action.TAKE_FUEL);
+        } else if (Parser.checkFor(SHIELDON, s)) {
+            Parser.require(Parser.SEMICOLON, "Expected semicolon.", s);
+            return new ActionNode(ActionNode.Action.SHIELD_ON);
+        } else if (Parser.checkFor(SHIELDOFF, s)) {
+            Parser.require(Parser.SEMICOLON, "Expected semicolon.", s);
+            return new ActionNode(ActionNode.Action.SHIELD_OFF);
+        } else if (Parser.checkFor(TURNAROUND, s)) {
+            Parser.require(Parser.SEMICOLON, "Expected semicolon.", s);
+            return new ActionNode(ActionNode.Action.TURN_AROUND);
         } else if (Parser.checkFor(LOOP, s)) {
-            return new LoopNode(BlockNode.parse(s));
+            return LoopNode.parse(s);
+        } else if (Parser.checkFor(IF, s)) {
+            return IfNode.parse(s);
+        } else if (Parser.checkFor(WHILE, s)) {
+            return WhileNode.parse(s);
         } else {
             Parser.fail("Expected next token to be statement", s);
             return null;

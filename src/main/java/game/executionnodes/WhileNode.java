@@ -2,6 +2,9 @@ package main.java.game.executionnodes;
 
 import main.java.game.Robot;
 import main.java.game.executionnodes.conditions.ConditionNode;
+import main.java.parser.Parser;
+
+import java.util.Scanner;
 
 public class WhileNode extends StatementNode {
     public final ConditionNode condition;
@@ -17,9 +20,16 @@ public class WhileNode extends StatementNode {
         if (robot == null)
             throw new IllegalArgumentException("Robot cannot be null.");
 
-        while (condition.isTrue()) {
+        while (condition.isTrue(robot)) {
             block.execute(robot);
         }
+    }
+
+    public static WhileNode parse(Scanner s) {
+        Parser.require(Parser.OPENPAREN, "Expected open parentheses.", s);
+        ConditionNode conditionNode = ConditionNode.parse(s);
+        Parser.require(Parser.CLOSEPAREN, "Expected close parentheses.", s);
+        return new WhileNode(conditionNode, BlockNode.parse(s));
     }
 
     @Override
