@@ -1,6 +1,6 @@
 package main.java.parser;
 
-import main.java.game.RobotProgramNode;
+import main.java.game.executionnodes.RobotProgramNode;
 
 import java.io.File;
 import java.io.FileNotFoundException;
