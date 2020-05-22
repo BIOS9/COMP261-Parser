@@ -1,13 +1,14 @@
 package main.java.game.executionnodes;
 
 import main.java.game.Robot;
+import main.java.game.executionnodes.conditions.ConditionNode;
 
-public class LoopNode extends StatementNode {
+public class IfNode extends StatementNode {
+    public final ConditionNode condition;
     public final BlockNode block;
 
-    public LoopNode(BlockNode block) {
-        if(block == null)
-            throw new IllegalArgumentException("Block cannot be null.");
+    public IfNode(ConditionNode condition, BlockNode block) {
+        this.condition = condition;
         this.block = block;
     }
 
@@ -16,15 +17,16 @@ public class LoopNode extends StatementNode {
         if (robot == null)
             throw new IllegalArgumentException("Robot cannot be null.");
 
-        while (!robot.isDead()) {
+        if(condition.isTrue()) {
             block.execute(robot);
         }
     }
 
     @Override
     public String toString() {
-        return "Loop{" +
-                "block=" + block +
+        return "IfNode{" +
+                "condition=" + condition +
+                ", block=" + block +
                 '}';
     }
 }

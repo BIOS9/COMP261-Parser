@@ -7,7 +7,7 @@ import main.java.game.Robot;
  *
  * @author Matthew Corfiatis
  */
-public class ActionNode extends StatementNode implements RobotProgramNode {
+public class ActionNode extends StatementNode {
     public enum Action {
         TURN_LEFT,
         TURN_RIGHT,
