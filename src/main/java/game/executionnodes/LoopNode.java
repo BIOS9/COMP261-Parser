@@ -15,6 +15,10 @@ public class LoopNode extends StatementNode implements RobotProgramNode {
     public void execute(Robot robot) {
         if (robot == null)
             throw new IllegalArgumentException("Robot cannot be null.");
+
+        while (!robot.isDead()) {
+            block.execute(robot);
+        }
     }
 
     @Override

@@ -22,6 +22,10 @@ public class ProgramNode implements Iterable<StatementNode>, RobotProgramNode {
     public void execute(Robot robot) {
         if (robot == null)
             throw new IllegalArgumentException("Robot cannot be null.");
+
+        for(StatementNode statement : this) {
+            statement.execute(robot);
+        }
     }
 
     public List<StatementNode> getStatements() {
