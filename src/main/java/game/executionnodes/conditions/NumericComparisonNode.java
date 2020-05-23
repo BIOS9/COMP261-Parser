@@ -6,17 +6,16 @@ import main.java.game.executionnodes.SensorNode;
 
 
 public abstract class NumericComparisonNode extends ConditionNode{
-    public final SensorNode sensor;
-    public final NumberNode number;
+    public final NumberNode number1, number2;
 
-    public NumericComparisonNode(SensorNode sensor, NumberNode number) {
-        if(sensor == null)
-            throw new IllegalArgumentException("Sensor cannot be null.");
-        if(number == null)
-            throw new IllegalArgumentException("Number cannot be null.");
+    public NumericComparisonNode(NumberNode number1, NumberNode number2) {
+        if(number1 == null)
+            throw new IllegalArgumentException("Number1 cannot be null.");
+        if(number2 == null)
+            throw new IllegalArgumentException("Number2 cannot be null.");
 
-        this.sensor = sensor;
-        this.number = number;
+        this.number1 = number1;
+        this.number2 = number2;
     }
 
     public abstract boolean evaluate(Robot robot);

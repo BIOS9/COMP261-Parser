@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
-public class SensorNode {
+public class SensorNode extends NumberNode {
     public enum Source {
         FUEL_LEFT,
         OPPONENT_LR,
@@ -33,6 +33,15 @@ public class SensorNode {
 
     public SensorNode(Source source) {
         this.source = source;
+    }
+
+    public static boolean canParse(Scanner s) {
+        for (Pattern p : SOURCE_PATTERNS.keySet()) {
+            if(s.hasNext(p))
+                return true;
+        }
+
+        return false;
     }
 
     public int getValue(Robot robot) {

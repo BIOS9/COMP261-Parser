@@ -9,8 +9,8 @@ import java.util.Scanner;
 
 public class LessThanNode extends NumericComparisonNode {
 
-    public LessThanNode(SensorNode sensor, NumberNode number) {
-        super(sensor, number);
+    public LessThanNode(NumberNode number1, NumberNode number2) {
+        super(number1, number2);
     }
 
     @Override
@@ -18,23 +18,23 @@ public class LessThanNode extends NumericComparisonNode {
         if(robot == null)
             throw new IllegalArgumentException("Robot cannot be null.");
 
-        return sensor.getValue(robot) < number.getValue(robot);
+        return number1.getValue(robot) < number2.getValue(robot);
     }
 
     public static LessThanNode parse(Scanner s) {
         Parser.require(Parser.OPENPAREN, "Expected open parentheses.", s);
-        SensorNode sensor = SensorNode.parse(s);
+        NumberNode number1 = NumberNode.parse(s);
         Parser.require(Parser.COMMA, "Expected comma.", s);
-        NumberNode number = NumberNode.parse(s);
+        NumberNode number2 = NumberNode.parse(s);
         Parser.require(Parser.CLOSEPAREN, "Expected close parentheses.", s);
-        return new LessThanNode(sensor, number);
+        return new LessThanNode(number1, number2);
     }
 
     @Override
     public String toString() {
         return "LessThanNode{" +
-                "sensor=" + sensor +
-                ", number=" + number +
+                "number1=" + number1 +
+                ", number2=" + number2 +
                 '}';
     }
 }

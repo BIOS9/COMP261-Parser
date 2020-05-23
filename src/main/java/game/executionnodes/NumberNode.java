@@ -1,34 +1,23 @@
 package main.java.game.executionnodes;
 
 import main.java.game.Robot;
+import main.java.game.executionnodes.numericoperators.NumericOperatorNode;
 import main.java.parser.Parser;
 
 import java.util.Scanner;
 
-public class NumberNode {
-    private final Integer fixedInteger;
 
-    public NumberNode(int fixedInteger) {
-        this.fixedInteger = fixedInteger;
-    }
-
-    public int getValue(Robot robot) {
-        return fixedInteger;
-    }
+public abstract class NumberNode {
+    public abstract int getValue(Robot robot);
 
     public static NumberNode parse(Scanner s) {
-        if (s.hasNext(Parser.NUMPAT))
-            return new NumberNode(Integer.parseInt(s.next()));
-        else {
-            Parser.fail("Invalid fixed integer.", s);
-            return null;
+        if(s.hasNext(Parser.NUMPAT)) {
+            String value = s.next(Parser.NUMPAT);
+            return new FixedNumberNode(Integer.parseInt(value));
+        } else if(SensorNode.canParse(s)) {
+            return SensorNode.parse(s);
+        } else {
+            return NumericOperatorNode.parse(s);
         }
-    }
-
-    @Override
-    public String toString() {
-        return "NumberNode{" +
-                "fixedInteger=" + fixedInteger +
-                '}';
     }
 }

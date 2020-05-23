@@ -32,6 +32,8 @@ public class IfNode extends StatementNode {
 
         if(condition.evaluate(robot)) {
             block.execute(robot);
+        } else {
+            elseBlock.execute(robot);
         }
     }
 
@@ -53,6 +55,7 @@ public class IfNode extends StatementNode {
         return "IfNode{" +
                 "condition=" + condition +
                 ", block=" + block +
+                ", elseBlock=" + elseBlock +
                 '}';
     }
 }

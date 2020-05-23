@@ -10,7 +10,10 @@ public abstract class ConditionNode {
     private static final Pattern
             EQUALS = Pattern.compile("eq"),
             GREATERTHAN = Pattern.compile("gt"),
-            LESSTHAN = Pattern.compile("lt");
+            LESSTHAN = Pattern.compile("lt"),
+            AND = Pattern.compile("and"),
+            OR = Pattern.compile("or"),
+            NOT = Pattern.compile("not");
 
     public abstract boolean evaluate(Robot robot);
 
@@ -21,6 +24,12 @@ public abstract class ConditionNode {
             return GreaterThanNode.parse(s);
         } else if (Parser.checkFor(LESSTHAN, s)) {
             return LessThanNode.parse(s);
+        } else if (Parser.checkFor(AND, s)) {
+            return AndNode.parse(s);
+        } else if (Parser.checkFor(OR, s)) {
+            return OrNode.parse(s);
+        } else if (Parser.checkFor(NOT, s)) {
+            return NotNode.parse(s);
         } else {
             Parser.fail("Expected next token to be condition.", s);
             return null;
