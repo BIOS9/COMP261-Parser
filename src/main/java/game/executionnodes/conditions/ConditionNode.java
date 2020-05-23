@@ -1,7 +1,6 @@
 package main.java.game.executionnodes.conditions;
 
 import main.java.game.Robot;
-import main.java.game.executionnodes.ActionNode;
 import main.java.parser.Parser;
 
 import java.util.Scanner;

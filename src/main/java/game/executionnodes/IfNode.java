@@ -5,12 +5,16 @@ import main.java.game.executionnodes.conditions.ConditionNode;
 import main.java.parser.Parser;
 
 import java.util.Scanner;
+import java.util.regex.Pattern;
 
 public class IfNode extends StatementNode {
+    private static final Pattern ELSE = Pattern.compile("else");
+
     public final ConditionNode condition;
     public final BlockNode block;
+    public final BlockNode elseBlock;
 
-    public IfNode(ConditionNode condition, BlockNode block) {
+    public IfNode(ConditionNode condition, BlockNode block, BlockNode elseBlock) {
         if(condition == null)
             throw new IllegalArgumentException("Condition cannot be null.");
         if(block == null)
@@ -18,6 +22,7 @@ public class IfNode extends StatementNode {
 
         this.condition = condition;
         this.block = block;
+        this.elseBlock = elseBlock;
     }
 
     @Override
@@ -34,7 +39,13 @@ public class IfNode extends StatementNode {
         Parser.require(Parser.OPENPAREN, "Expected open parentheses.", s);
         ConditionNode conditionNode = ConditionNode.parse(s);
         Parser.require(Parser.CLOSEPAREN, "Expected close parentheses.", s);
-        return new IfNode(conditionNode, BlockNode.parse(s));
+
+        BlockNode block = BlockNode.parse(s);
+        BlockNode elseBlock = null;
+        if(Parser.checkFor(ELSE, s)) {
+            elseBlock = BlockNode.parse(s);
+        }
+        return new IfNode(conditionNode, block, elseBlock);
     }
 
     @Override

@@ -82,7 +82,7 @@ public class Parser {
 
     // Useful Patterns
 
-    public static final Pattern NUMPAT = Pattern.compile("-?\\d+"); // ("-?(0|[1-9][0-9]*)");
+    public static final Pattern NUMPAT = Pattern.compile("-?(0|[1-9][0-9]*)"); // ("-?\\d+");
     public static final Pattern OPENPAREN = Pattern.compile("\\(");
     public static final Pattern CLOSEPAREN = Pattern.compile("\\)");
     public static final Pattern OPENBRACE = Pattern.compile("\\{");
