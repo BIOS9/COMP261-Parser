@@ -3,12 +3,12 @@ package main.java.game.executionnodes;
 import main.java.game.Robot;
 import main.java.parser.Parser;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 import java.util.regex.Pattern;
 
 public class SensorNode extends NumberNode {
+    private final NumberNode argument;
+
     public enum Source {
         FUEL_LEFT,
         OPPONENT_LR,
@@ -18,6 +18,11 @@ public class SensorNode extends NumberNode {
         BARREL_FB,
         WALL_DIST
     }
+
+    private static final Set<Source> sourcesWithArguments = new HashSet<Source>() {{
+        add(Source.BARREL_FB);
+        add(Source.BARREL_LR);
+    }};
 
     private static final Map<Pattern, Source> SOURCE_PATTERNS = new HashMap<Pattern, Source>() {{
         put(Pattern.compile("fuelLeft"), Source.FUEL_LEFT);
@@ -31,8 +36,9 @@ public class SensorNode extends NumberNode {
 
     public final Source source;
 
-    public SensorNode(Source source) {
+    public SensorNode(Source source, NumberNode argument) {
         this.source = source;
+        this.argument = argument;
     }
 
     public static boolean canParse(Scanner s) {
@@ -47,8 +53,12 @@ public class SensorNode extends NumberNode {
     public int getValue(Robot robot) {
         switch (source) {
             case BARREL_FB:
+                if(argument != null)
+                    return robot.getBarrelFB(argument.getValue(robot));
                 return robot.getClosestBarrelFB();
             case BARREL_LR:
+                if(argument != null)
+                    return robot.getBarrelLR(argument.getValue(robot));
                 return robot.getClosestBarrelLR();
             case FUEL_LEFT:
                 return robot.getFuel();
@@ -67,8 +77,19 @@ public class SensorNode extends NumberNode {
 
     public static SensorNode parse(Scanner s) {
         for (Map.Entry<Pattern, Source> source : SOURCE_PATTERNS.entrySet()) {
-            if(Parser.checkFor(source.getKey(), s))
-                return new SensorNode(source.getValue());
+            if(Parser.checkFor(source.getKey(), s)) {
+                if(Parser.checkFor(Parser.OPENPAREN, s)) {
+                    if(!sourcesWithArguments.contains(source.getValue())) {
+                        Parser.fail("Unexpected arguments. This source does not allow arguments", s);
+                        return null;
+                    }
+                    NumberNode number = NumberNode.parse(s);
+                    Parser.require(Parser.CLOSEPAREN, "Expected closed parentheses.", s);
+                    return new SensorNode(source.getValue(), number);
+                } else {
+                    return new SensorNode(source.getValue(), null);
+                }
+            }
         }
 
         Parser.fail("Unknown sensor source.", s);

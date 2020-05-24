@@ -19,7 +19,8 @@ public abstract class StatementNode implements RobotProgramNode {
             SHIELDOFF = Pattern.compile("shieldOff"),
             LOOP = Pattern.compile("loop"),
             IF = Pattern.compile("if"),
-            WHILE = Pattern.compile("while");
+            WHILE = Pattern.compile("while"),
+            VARIABLE = Pattern.compile("$");
 
     @Override
     public abstract void execute(Robot robot);
