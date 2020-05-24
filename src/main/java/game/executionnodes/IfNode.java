@@ -1,28 +1,27 @@
 package main.java.game.executionnodes;
 
+import javafx.util.Pair;
+import jdk.nashorn.internal.ir.Block;
 import main.java.game.Robot;
 import main.java.game.executionnodes.conditions.ConditionNode;
 import main.java.parser.Parser;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
 public class IfNode extends StatementNode {
-    private static final Pattern ELSE = Pattern.compile("else");
+    private static final Pattern
+            ELSE = Pattern.compile("else"),
+            ELSEIF = Pattern.compile("elif");
 
-    public final ConditionNode condition;
-    public final BlockNode block;
-    public final BlockNode elseBlock;
+    private final List<Pair<ConditionNode, BlockNode>> ifBlocks;
 
-    public IfNode(ConditionNode condition, BlockNode block, BlockNode elseBlock) {
-        if(condition == null)
-            throw new IllegalArgumentException("Condition cannot be null.");
-        if(block == null)
-            throw new IllegalArgumentException("Block cannot be null.");
-
-        this.condition = condition;
-        this.block = block;
-        this.elseBlock = elseBlock;
+    public IfNode(List<Pair<ConditionNode, BlockNode>> ifBlocks) {
+        if(ifBlocks == null)
+            throw new IllegalArgumentException("if list cannot be null.");
+        this.ifBlocks = ifBlocks;
     }
 
     @Override
@@ -30,32 +29,42 @@ public class IfNode extends StatementNode {
         if (robot == null)
             throw new IllegalArgumentException("Robot cannot be null.");
 
-        if(condition.evaluate(robot)) {
-            block.execute(robot);
-        } else {
-            elseBlock.execute(robot);
+        for(Pair<ConditionNode, BlockNode> ifPair : ifBlocks) {
+            if(ifPair.getKey() == null || ifPair.getKey().evaluate(robot)) {
+                ifPair.getValue().execute(robot);
+                return;
+            }
         }
     }
 
     public static IfNode parse(Scanner s) {
-        Parser.require(Parser.OPENPAREN, "Expected open parentheses.", s);
-        ConditionNode conditionNode = ConditionNode.parse(s);
-        Parser.require(Parser.CLOSEPAREN, "Expected close parentheses.", s);
+       ArrayList<Pair<ConditionNode, BlockNode>> ifBlocks = new ArrayList<>();
 
-        BlockNode block = BlockNode.parse(s);
-        BlockNode elseBlock = null;
-        if(Parser.checkFor(ELSE, s)) {
-            elseBlock = BlockNode.parse(s);
+        Parser.require(Parser.OPENPAREN, "Expected open parentheses.", s);
+        ConditionNode ifCondition = ConditionNode.parse(s);
+        Parser.require(Parser.CLOSEPAREN, "Expected close parentheses.", s);
+        BlockNode ifBlock = BlockNode.parse(s);
+        ifBlocks.add(new Pair<>(ifCondition, ifBlock));
+
+        while (Parser.checkFor(ELSEIF, s)) {
+            Parser.require(Parser.OPENPAREN, "Expected open parentheses.", s);
+            ConditionNode elseIfConditionNode = ConditionNode.parse(s);
+            Parser.require(Parser.CLOSEPAREN, "Expected close parentheses.", s);
+            BlockNode elseIfBlock = BlockNode.parse(s);
+            ifBlocks.add(new Pair<>(elseIfConditionNode, elseIfBlock));
         }
-        return new IfNode(conditionNode, block, elseBlock);
+
+        if(Parser.checkFor(ELSE, s)) {
+            BlockNode elseIfBlock = BlockNode.parse(s);
+            ifBlocks.add(new Pair<>(null, elseIfBlock));
+        }
+        return new IfNode(ifBlocks);
     }
 
     @Override
     public String toString() {
         return "IfNode{" +
-                "condition=" + condition +
-                ", block=" + block +
-                ", elseBlock=" + elseBlock +
+                "ifBlocks=" + ifBlocks +
                 '}';
     }
 }
