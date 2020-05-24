@@ -26,29 +26,21 @@ public abstract class StatementNode implements RobotProgramNode {
 
     public static StatementNode parse(Scanner s) {
         if (Parser.checkFor(MOVE, s)) {
-            Parser.require(Parser.SEMICOLON, "Expected semicolon.", s);
-            return new ActionNode(ActionNode.Action.MOVE_FORWARD);
+            return ActionNode.parse(s, ActionNode.Action.MOVE_FORWARD);
         } else if (Parser.checkFor(TURNL, s)) {
-            Parser.require(Parser.SEMICOLON, "Expected semicolon.", s);
-            return new ActionNode(ActionNode.Action.TURN_LEFT);
+            return ActionNode.parse(s, ActionNode.Action.TURN_LEFT);
         } else if (Parser.checkFor(TURNR, s)) {
-            Parser.require(Parser.SEMICOLON, "Expected semicolon.", s);
-            return new ActionNode(ActionNode.Action.TURN_RIGHT);
+            return ActionNode.parse(s, ActionNode.Action.TURN_RIGHT);
         } else if (Parser.checkFor(WAIT, s)) {
-            Parser.require(Parser.SEMICOLON, "Expected semicolon.", s);
-            return new ActionNode(ActionNode.Action.WAIT);
+            return ActionNode.parse(s, ActionNode.Action.WAIT);
         } else if (Parser.checkFor(TAKEFUEL, s)) {
-            Parser.require(Parser.SEMICOLON, "Expected semicolon.", s);
-            return new ActionNode(ActionNode.Action.TAKE_FUEL);
+            return ActionNode.parse(s, ActionNode.Action.TAKE_FUEL);
         } else if (Parser.checkFor(SHIELDON, s)) {
-            Parser.require(Parser.SEMICOLON, "Expected semicolon.", s);
-            return new ActionNode(ActionNode.Action.SHIELD_ON);
+            return ActionNode.parse(s, ActionNode.Action.SHIELD_ON);
         } else if (Parser.checkFor(SHIELDOFF, s)) {
-            Parser.require(Parser.SEMICOLON, "Expected semicolon.", s);
-            return new ActionNode(ActionNode.Action.SHIELD_OFF);
+            return ActionNode.parse(s, ActionNode.Action.SHIELD_OFF);
         } else if (Parser.checkFor(TURNAROUND, s)) {
-            Parser.require(Parser.SEMICOLON, "Expected semicolon.", s);
-            return new ActionNode(ActionNode.Action.TURN_AROUND);
+            return ActionNode.parse(s, ActionNode.Action.TURN_AROUND);
         } else if (Parser.checkFor(LOOP, s)) {
             return LoopNode.parse(s);
         } else if (Parser.checkFor(IF, s)) {
