@@ -12,16 +12,22 @@ import java.util.Scanner;
 import java.util.regex.Pattern;
 
 public class IfNode extends StatementNode {
+    private final BlockNode parentBlock;
+
     private static final Pattern
             ELSE = Pattern.compile("else"),
             ELSEIF = Pattern.compile("elif");
 
     private final List<Pair<ConditionNode, BlockNode>> ifBlocks;
 
-    public IfNode(List<Pair<ConditionNode, BlockNode>> ifBlocks) {
+    public IfNode(List<Pair<ConditionNode, BlockNode>> ifBlocks, BlockNode parentBlock) {
         if(ifBlocks == null)
             throw new IllegalArgumentException("if list cannot be null.");
         this.ifBlocks = ifBlocks;
+
+        if(parentBlock == null)
+            throw new IllegalArgumentException("Parent block cannot be null.");
+        this.parentBlock = parentBlock;
     }
 
     @Override
@@ -37,28 +43,28 @@ public class IfNode extends StatementNode {
         }
     }
 
-    public static IfNode parse(Scanner s) {
+    public static IfNode parse(Scanner s, BlockNode parentBlock) {
        ArrayList<Pair<ConditionNode, BlockNode>> ifBlocks = new ArrayList<>();
 
         Parser.require(Parser.OPENPAREN, "Expected open parentheses.", s);
         ConditionNode ifCondition = ConditionNode.parse(s);
         Parser.require(Parser.CLOSEPAREN, "Expected close parentheses.", s);
-        BlockNode ifBlock = BlockNode.parse(s);
+        BlockNode ifBlock = BlockNode.parse(s, parentBlock);
         ifBlocks.add(new Pair<>(ifCondition, ifBlock));
 
         while (Parser.checkFor(ELSEIF, s)) {
             Parser.require(Parser.OPENPAREN, "Expected open parentheses.", s);
             ConditionNode elseIfConditionNode = ConditionNode.parse(s);
             Parser.require(Parser.CLOSEPAREN, "Expected close parentheses.", s);
-            BlockNode elseIfBlock = BlockNode.parse(s);
+            BlockNode elseIfBlock = BlockNode.parse(s, parentBlock);
             ifBlocks.add(new Pair<>(elseIfConditionNode, elseIfBlock));
         }
 
         if(Parser.checkFor(ELSE, s)) {
-            BlockNode elseIfBlock = BlockNode.parse(s);
+            BlockNode elseIfBlock = BlockNode.parse(s, parentBlock);
             ifBlocks.add(new Pair<>(null, elseIfBlock));
         }
-        return new IfNode(ifBlocks);
+        return new IfNode(ifBlocks, parentBlock);
     }
 
     @Override

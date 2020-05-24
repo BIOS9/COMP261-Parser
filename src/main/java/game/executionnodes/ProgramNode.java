@@ -8,23 +8,20 @@ import java.util.*;
 import java.util.stream.Stream;
 
 public class ProgramNode implements Iterable<StatementNode>, RobotProgramNode {
-    private final List<StatementNode> statements;
+    private final BlockNode block;
 
-    public ProgramNode(List<StatementNode> statements) {
-        if(statements == null)
-            this.statements = Collections.emptyList();
-        else
-            this.statements = new ArrayList<>(statements);
+    public ProgramNode(BlockNode block) {
+        this.block = block;
     }
 
     @Override
     public void execute(Robot robot) {
         if (robot == null)
             throw new IllegalArgumentException("Robot cannot be null.");
+        if(block == null)
+            return;
 
-        for(StatementNode statement : this) {
-            statement.execute(robot);
-        }
+        block.execute(robot);
     }
 
     public static ProgramNode parse(Scanner s) {
@@ -38,29 +35,29 @@ public class ProgramNode implements Iterable<StatementNode>, RobotProgramNode {
                 statementNodes.add(statement);
             }
 
-            return new ProgramNode(statementNodes);
+            return new ProgramNode(new BlockNode(statementNodes, null));
         } catch (IllegalArgumentException ex) {
             throw new ParserFailureException(ex.getMessage());
         }
     }
 
     public List<StatementNode> getStatements() {
-        return Collections.unmodifiableList(statements);
+        return block.getStatements();
     }
 
     public Stream<StatementNode> stream() {
-        return statements.stream();
+        return block.stream();
     }
 
     @Override
     public Iterator<StatementNode> iterator() {
-        return statements.iterator();
+        return block.iterator();
     }
 
     @Override
     public String toString() {
-        return "Program{" +
-                "statements=" + statements +
+        return "ProgramNode{" +
+                "block=" + block +
                 '}';
     }
 }

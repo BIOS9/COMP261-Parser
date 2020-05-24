@@ -1,6 +1,5 @@
 package main.java.game.executionnodes;
 
-import jdk.nashorn.internal.ir.Block;
 import main.java.game.Robot;
 import main.java.parser.Parser;
 
@@ -19,14 +18,15 @@ public abstract class StatementNode implements RobotProgramNode {
             SHIELDOFF = Pattern.compile("shieldOff"),
             LOOP = Pattern.compile("loop"),
             IF = Pattern.compile("if"),
-            WHILE = Pattern.compile("while"),
-            VARIABLE = Pattern.compile("$");
+            WHILE = Pattern.compile("while");
 
     @Override
     public abstract void execute(Robot robot);
 
     public static StatementNode parse(Scanner s) {
-        if (Parser.checkFor(MOVE, s)) {
+        if(s.hasNext(Parser.VARPAT)) {
+            return VariableAssignmentNode.parse(s);
+        } else if (Parser.checkFor(MOVE, s)) {
             return ActionNode.parse(s, ActionNode.Action.MOVE_FORWARD);
         } else if (Parser.checkFor(TURNL, s)) {
             return ActionNode.parse(s, ActionNode.Action.TURN_LEFT);

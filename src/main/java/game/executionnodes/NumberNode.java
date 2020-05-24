@@ -14,6 +14,8 @@ public abstract class NumberNode {
         if(s.hasNext(Parser.NUMPAT)) {
             String value = s.next(Parser.NUMPAT);
             return new FixedNumberNode(Integer.parseInt(value));
+        } else if(s.hasNext(Parser.VARPAT)) {
+            return VariableNode.parse(s);
         } else if(SensorNode.canParse(s)) {
             return SensorNode.parse(s);
         } else {

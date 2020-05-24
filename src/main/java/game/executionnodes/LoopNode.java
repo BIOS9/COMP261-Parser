@@ -6,11 +6,16 @@ import java.util.Scanner;
 
 public class LoopNode extends StatementNode {
     public final BlockNode block;
+    private final BlockNode parentBlock;
 
-    public LoopNode(BlockNode block) {
+    public LoopNode(BlockNode block, BlockNode parentBlock) {
         if(block == null)
             throw new IllegalArgumentException("Block cannot be null.");
         this.block = block;
+
+        if(parentBlock == null)
+            throw new IllegalArgumentException("Parent block cannot be null.");
+        this.parentBlock = parentBlock;
     }
 
     @Override
@@ -23,8 +28,8 @@ public class LoopNode extends StatementNode {
         }
     }
 
-    public static LoopNode parse(Scanner s) {
-        return new LoopNode(BlockNode.parse(s));
+    public static LoopNode parse(Scanner s, BlockNode parentBlock) {
+        return new LoopNode(BlockNode.parse(s, parentBlock), parentBlock);
     }
 
     @Override

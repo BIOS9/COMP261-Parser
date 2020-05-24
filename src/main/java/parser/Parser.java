@@ -83,12 +83,14 @@ public class Parser {
     // Useful Patterns
 
     public static final Pattern NUMPAT = Pattern.compile("-?(0|[1-9][0-9]*)"); // ("-?\\d+");
+    public static final Pattern VARPAT = Pattern.compile("-\\\\$[A-Za-z][A-Za-z0-9]*");
     public static final Pattern OPENPAREN = Pattern.compile("\\(");
     public static final Pattern CLOSEPAREN = Pattern.compile("\\)");
     public static final Pattern OPENBRACE = Pattern.compile("\\{");
     public static final Pattern CLOSEBRACE = Pattern.compile("\\}");
     public static final Pattern SEMICOLON = Pattern.compile(";");
     public static final Pattern COMMA = Pattern.compile(",");
+    public static final Pattern EQUALS = Pattern.compile("=");
 
     /**
      * Report a failure in the parser.
