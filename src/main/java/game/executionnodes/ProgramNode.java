@@ -27,7 +27,18 @@ public class ProgramNode implements Iterable<StatementNode>, RobotProgramNode {
 
     public static ProgramNode parse(Scanner s) {
         try {
-            return new ProgramNode(BlockNode.parse(s, null));
+            List<StatementNode> statementNodes = new ArrayList<>();
+            BlockNode block = new BlockNode(null);
+
+            while (s.hasNext()) {
+                StatementNode statement = StatementNode.parse(s, block);
+                if (statement == null)
+                    Parser.fail("Statement cannot be null", s);
+                statementNodes.add(statement);
+            }
+            block.setStatements(statementNodes);
+
+            return new ProgramNode(block);
         } catch (IllegalArgumentException ex) {
             throw new ParserFailureException(ex.getMessage());
         }

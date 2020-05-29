@@ -9,7 +9,13 @@ public class VariableNode extends NumberNode {
     public final String variableName;
     private BlockNode parentBlock;
 
-    public VariableNode(String variableName) {
+    public VariableNode(String variableName, BlockNode parentBlock) {
+        if(variableName == null)
+            throw new IllegalArgumentException("Name cannot be null.");
+        if(parentBlock == null)
+            throw new IllegalArgumentException("Parent block cannot be null.");
+
+        this.parentBlock = parentBlock;
         this.variableName = variableName;
     }
 
@@ -18,12 +24,13 @@ public class VariableNode extends NumberNode {
         if(parentBlock == null)
             throw new IllegalStateException("Parent block must be set but was null when getting variable.");
 
+        System.out.println(parentBlock.getVariable(variableName));
         return parentBlock.getVariable(variableName);
     }
 
-    public static VariableNode parse(Scanner s) {
+    public static VariableNode parse(Scanner s, BlockNode parentBlock) {
         String name = Parser.require(Parser.VARPAT, "Expected variable.", s);
-        return new VariableNode(name);
+        return new VariableNode(name, parentBlock);
     }
 
     @Override

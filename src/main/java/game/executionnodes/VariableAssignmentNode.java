@@ -10,20 +10,24 @@ public class VariableAssignmentNode extends StatementNode {
     public final NumberNode number;
     private BlockNode parentBlock;
 
-    public VariableAssignmentNode(String name, NumberNode number) {
+    public VariableAssignmentNode(String name, NumberNode number, BlockNode parentBlock) {
         if(name == null)
             throw new IllegalArgumentException("Name cannot be null.");
         if(number == null)
             throw new IllegalArgumentException("Number cannot be null.");
+        if(parentBlock == null)
+            throw new IllegalArgumentException("Parent block cannot be null.");
 
         this.name = name;
         this.number = number;
+        this.parentBlock = parentBlock;
     }
 
     @Override
     public void execute(Robot robot) {
         if(parentBlock == null)
             throw new IllegalStateException("Parent block must be set but was null when setting variable.");
+        //System.out.println("Setting variable: " + name + " to: " + number.getValue(robot));
         parentBlock.setVariable(name, number.getValue(robot));
     }
 
@@ -32,7 +36,7 @@ public class VariableAssignmentNode extends StatementNode {
         Parser.require(Parser.EQUALS, "Expected variable assignment.", s);
         NumberNode number = NumberNode.parse(s, parentBlock);
         Parser.require(Parser.SEMICOLON, "Expected semicolon.", s);
-        return new VariableAssignmentNode(variableName, number);
+        return new VariableAssignmentNode(variableName, number, parentBlock);
     }
 
     @Override

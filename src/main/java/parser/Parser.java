@@ -83,7 +83,7 @@ public class Parser {
     // Useful Patterns
 
     public static final Pattern NUMPAT = Pattern.compile("-?(0|[1-9][0-9]*)"); // ("-?\\d+");
-    public static final Pattern VARPAT = Pattern.compile("-\\\\$[A-Za-z][A-Za-z0-9]*");
+    public static final Pattern VARPAT = Pattern.compile("\\$[A-Za-z][A-Za-z0-9]*");
     public static final Pattern OPENPAREN = Pattern.compile("\\(");
     public static final Pattern CLOSEPAREN = Pattern.compile("\\)");
     public static final Pattern OPENBRACE = Pattern.compile("\\{");

@@ -41,19 +41,42 @@ public class BlockNode implements Iterable<StatementNode>, RobotProgramNode {
         Parser.require(Parser.OPENBRACE, "Expected open curly brace for block section.", s);
 
         while (s.hasNext()) {
-            if (Parser.checkFor(Parser.CLOSEBRACE, s))
+            if (Parser.checkFor(Parser.CLOSEBRACE, s)) {
+                block.setStatements(statements);
                 return block;
+            }
 
             statements.add(StatementNode.parse(s, block));
         }
 
-        block.setStatements(statements);
         Parser.fail("End of file reached with open block. Expected \"}\"", s);
         return null;
     }
 
+    /**
+     * Overwrites variable if it has been declared in parent scope
+     * or declares it in the current scope if it has not been declared yet.
+     */
     public void setVariable(String name, int value) {
-        variables.put(name, value);
+        if(!replaceParentVariable(name, value)) {
+            variables.put(name, value);
+        }
+    }
+
+    /**
+     * If parent blocks contain variable, replace it up the stack
+     * If variable has not been declared above yet, return false.
+     */
+    private boolean replaceParentVariable(String name, int value) {
+        if(variables.containsKey(name)) {
+            variables.replace(name, value);
+            return true;
+        }
+
+        if(parentBlock == null)
+            return false;
+
+        return parentBlock.replaceParentVariable(name, value);
     }
 
     public int getVariable(String name) {
