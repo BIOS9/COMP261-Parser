@@ -18,6 +18,7 @@ public class VariableAssignmentNode extends StatementNode {
         if(parentBlock == null)
             throw new IllegalArgumentException("Parent block cannot be null.");
 
+        parentBlock.declareParserVariable(name);
         this.name = name;
         this.number = number;
         this.parentBlock = parentBlock;

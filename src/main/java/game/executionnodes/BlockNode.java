@@ -10,6 +10,7 @@ public class BlockNode implements Iterable<StatementNode>, RobotProgramNode {
     private final BlockNode parentBlock;
     private List<StatementNode> statements;
     private final Map<String, Integer> variables = new HashMap<>();
+    private final Set<String> parserVariableDeclarations = new HashSet<>();
 
     public BlockNode(BlockNode parentBlock) {
         this.parentBlock = parentBlock;
@@ -88,6 +89,24 @@ public class BlockNode implements Iterable<StatementNode>, RobotProgramNode {
             else
                 throw new IllegalStateException("Variable must be declared before it can be used.");
         }
+    }
+
+    /**
+     * Checks if a variable has declared in this or a parent block during parsing.
+     */
+    public boolean isParserVariableDeclared(String name) {
+        if(parserVariableDeclarations.contains(name))
+            return true;
+        if(parentBlock == null)
+            return false;
+        return parentBlock.isParserVariableDeclared(name);
+    }
+
+    /**
+     * Declares a variable in this block to use during parsing.
+     */
+    public void declareParserVariable(String name) {
+        parserVariableDeclarations.add(name);
     }
 
     public List<StatementNode> getStatements() {
