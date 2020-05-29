@@ -75,7 +75,7 @@ public class SensorNode extends NumberNode {
         throw new IllegalArgumentException("Unhandled sensor source.");
     }
 
-    public static SensorNode parse(Scanner s) {
+    public static SensorNode parse(Scanner s, BlockNode parentBlock) {
         for (Map.Entry<Pattern, Source> source : SOURCE_PATTERNS.entrySet()) {
             if(Parser.checkFor(source.getKey(), s)) {
                 if(Parser.checkFor(Parser.OPENPAREN, s)) {
@@ -83,7 +83,7 @@ public class SensorNode extends NumberNode {
                         Parser.fail("Unexpected arguments. This source does not allow arguments", s);
                         return null;
                     }
-                    NumberNode number = NumberNode.parse(s);
+                    NumberNode number = NumberNode.parse(s, parentBlock);
                     Parser.require(Parser.CLOSEPAREN, "Expected closed parentheses.", s);
                     return new SensorNode(source.getValue(), number);
                 } else {

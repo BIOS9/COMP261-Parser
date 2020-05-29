@@ -1,6 +1,7 @@
 package main.java.game.executionnodes.conditions;
 
 import main.java.game.Robot;
+import main.java.game.executionnodes.BlockNode;
 import main.java.parser.Parser;
 
 import java.util.Scanner;
@@ -17,19 +18,19 @@ public abstract class ConditionNode {
 
     public abstract boolean evaluate(Robot robot);
 
-    public static ConditionNode parse(Scanner s) {
+    public static ConditionNode parse(Scanner s, BlockNode parentBlock) {
         if (Parser.checkFor(EQUALS, s)) {
-            return EqualsNode.parse(s);
+            return EqualsNode.parse(s, parentBlock);
         } else if (Parser.checkFor(GREATERTHAN, s)) {
-            return GreaterThanNode.parse(s);
+            return GreaterThanNode.parse(s, parentBlock);
         } else if (Parser.checkFor(LESSTHAN, s)) {
-            return LessThanNode.parse(s);
+            return LessThanNode.parse(s, parentBlock);
         } else if (Parser.checkFor(AND, s)) {
-            return AndNode.parse(s);
+            return AndNode.parse(s, parentBlock);
         } else if (Parser.checkFor(OR, s)) {
-            return OrNode.parse(s);
+            return OrNode.parse(s, parentBlock);
         } else if (Parser.checkFor(NOT, s)) {
-            return NotNode.parse(s);
+            return NotNode.parse(s, parentBlock);
         } else {
             Parser.fail("Expected next token to be condition.", s);
             return null;

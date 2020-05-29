@@ -1,6 +1,7 @@
 package main.java.game.executionnodes.conditions;
 
 import main.java.game.Robot;
+import main.java.game.executionnodes.BlockNode;
 import main.java.game.executionnodes.NumberNode;
 import main.java.game.executionnodes.SensorNode;
 import main.java.parser.Parser;
@@ -21,11 +22,11 @@ public class EqualsNode extends NumericComparisonNode {
         return number1.getValue(robot) == number2.getValue(robot);
     }
 
-    public static EqualsNode parse(Scanner s) {
+    public static EqualsNode parse(Scanner s, BlockNode parentBlock) {
         Parser.require(Parser.OPENPAREN, "Expected open parentheses.", s);
-        NumberNode number1 = NumberNode.parse(s);
+        NumberNode number1 = NumberNode.parse(s, parentBlock);
         Parser.require(Parser.COMMA, "Expected comma.", s);
-        NumberNode number2 = NumberNode.parse(s);
+        NumberNode number2 = NumberNode.parse(s, parentBlock);
         Parser.require(Parser.CLOSEPAREN, "Expected close parentheses.", s);
         return new EqualsNode(number1, number2);
     }

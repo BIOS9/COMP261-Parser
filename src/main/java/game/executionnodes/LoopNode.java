@@ -23,8 +23,8 @@ public class LoopNode extends StatementNode {
         }
     }
 
-    public static LoopNode parse(Scanner s) {
-        return new LoopNode(BlockNode.parse(s));
+    public static LoopNode parse(Scanner s, BlockNode parentBlock) {
+        return new LoopNode(BlockNode.parse(s, parentBlock));
     }
 
     @Override

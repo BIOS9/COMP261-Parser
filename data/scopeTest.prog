@@ -1,0 +1,10 @@
+if(eq(1, 1)) {
+    $test = 3;
+    move($test);
+    if(eq(1, 1)) {
+        turnL;
+        move($test);
+    }
+}
+turnL;
+move($test);

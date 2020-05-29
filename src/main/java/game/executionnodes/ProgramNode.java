@@ -8,13 +8,10 @@ import java.util.*;
 import java.util.stream.Stream;
 
 public class ProgramNode implements Iterable<StatementNode>, RobotProgramNode {
-    private final List<StatementNode> statements;
+    private final BlockNode block;
 
-    public ProgramNode(List<StatementNode> statements) {
-        if(statements == null)
-            this.statements = Collections.emptyList();
-        else
-            this.statements = new ArrayList<>(statements);
+    public ProgramNode(BlockNode block) {
+        this.block = block;
     }
 
     @Override
@@ -22,45 +19,48 @@ public class ProgramNode implements Iterable<StatementNode>, RobotProgramNode {
         if (robot == null)
             throw new IllegalArgumentException("Robot cannot be null.");
 
-        for(StatementNode statement : this) {
-            statement.execute(robot);
-        }
+        if(block == null)
+            return;
+
+        block.execute(robot);
     }
 
     public static ProgramNode parse(Scanner s) {
         try {
             List<StatementNode> statementNodes = new ArrayList<>();
+            BlockNode block = new BlockNode(null);
 
             while (s.hasNext()) {
-                StatementNode statement = StatementNode.parse(s);
+                StatementNode statement = StatementNode.parse(s, block);
                 if (statement == null)
                     Parser.fail("Statement cannot be null", s);
                 statementNodes.add(statement);
             }
+            block.setStatements(statementNodes);
 
-            return new ProgramNode(statementNodes);
+            return new ProgramNode(block);
         } catch (IllegalArgumentException ex) {
             throw new ParserFailureException(ex.getMessage());
         }
     }
 
     public List<StatementNode> getStatements() {
-        return Collections.unmodifiableList(statements);
+        return block.getStatements();
     }
 
     public Stream<StatementNode> stream() {
-        return statements.stream();
+        return block.stream();
     }
 
     @Override
     public Iterator<StatementNode> iterator() {
-        return statements.iterator();
+        return block.iterator();
     }
 
     @Override
     public String toString() {
-        return "Program{" +
-                "statements=" + statements +
+        return "ProgramNode{" +
+                "block=" + block +
                 '}';
     }
 }
