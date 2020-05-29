@@ -1,6 +1,7 @@
 package main.java.game.executionnodes.conditions;
 
 import main.java.game.Robot;
+import main.java.game.executionnodes.BlockNode;
 import main.java.game.executionnodes.NumberNode;
 import main.java.game.executionnodes.SensorNode;
 import main.java.parser.Parser;
@@ -25,11 +26,11 @@ public class AndNode extends ConditionNode {
         return condition1.evaluate(robot) && condition2.evaluate(robot);
     }
 
-    public static AndNode parse(Scanner s) {
+    public static AndNode parse(Scanner s, BlockNode parentBlock) {
         Parser.require(Parser.OPENPAREN, "Expected open parentheses.", s);
-        ConditionNode condition1 = ConditionNode.parse(s);
+        ConditionNode condition1 = ConditionNode.parse(s, parentBlock);
         Parser.require(Parser.COMMA, "Expected comma.", s);
-        ConditionNode condition2 = ConditionNode.parse(s);
+        ConditionNode condition2 = ConditionNode.parse(s, parentBlock);
         Parser.require(Parser.CLOSEPAREN, "Expected close parentheses.", s);
         return new AndNode(condition1, condition2);
     }

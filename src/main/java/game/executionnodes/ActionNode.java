@@ -41,14 +41,14 @@ public class ActionNode extends StatementNode {
         this.argument = argument;
     }
 
-    public static ActionNode parse(Scanner s, Action action) {
+    public static ActionNode parse(Scanner s, Action action, BlockNode parentBlock) {
         if(Parser.checkFor(Parser.SEMICOLON, s)) {
             return new ActionNode(action, null);
         } else if(!actionsWithArgument.contains(action)) {
             Parser.fail("Expected semicolon for action.", s);
             return null;
         } else if(Parser.checkFor(Parser.OPENPAREN, s)) {
-            NumberNode number = NumberNode.parse(s);
+            NumberNode number = NumberNode.parse(s, parentBlock);
             Parser.require(Parser.CLOSEPAREN, "Expected closed parentheses.", s);
             Parser.require(Parser.SEMICOLON, "Expected semicolon for action.", s);
             return new ActionNode(action, number);

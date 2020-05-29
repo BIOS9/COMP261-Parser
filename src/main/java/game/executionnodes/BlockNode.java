@@ -7,9 +7,14 @@ import java.util.*;
 import java.util.stream.Stream;
 
 public class BlockNode implements Iterable<StatementNode>, RobotProgramNode {
-    private final List<StatementNode> statements;
+    private BlockNode parentBlock;
+    private List<StatementNode> statements;
 
-    public BlockNode(List<StatementNode> statements) {
+    public BlockNode(BlockNode parentBlock) {
+        this.parentBlock = parentBlock;
+    }
+
+    public void setStatements(List<StatementNode> statements) {
         if(statements == null)
             throw new IllegalArgumentException("Statements cannot be null.");
         if(statements.size() < 1)
@@ -28,21 +33,25 @@ public class BlockNode implements Iterable<StatementNode>, RobotProgramNode {
         }
     }
 
-    public static BlockNode parse(Scanner s) {
+    public static BlockNode parse(Scanner s, BlockNode parentBlock) {
+        BlockNode block = new BlockNode(parentBlock);
         List<StatementNode> statements = new ArrayList<>();
 
         Parser.require(Parser.OPENBRACE, "Expected open curly brace for block section.", s);
 
         while (s.hasNext()) {
             if (Parser.checkFor(Parser.CLOSEBRACE, s))
-                return new BlockNode(statements);
+                return block;
 
-            statements.add(StatementNode.parse(s));
+            statements.add(StatementNode.parse(s, block));
         }
 
+        block.setStatements(statements);
         Parser.fail("End of file reached with open block. Expected \"}\"", s);
         return null;
     }
+
+    public 
 
     public List<StatementNode> getStatements() {
         return Collections.unmodifiableList(statements);

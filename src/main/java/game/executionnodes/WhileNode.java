@@ -25,11 +25,11 @@ public class WhileNode extends StatementNode {
         }
     }
 
-    public static WhileNode parse(Scanner s) {
+    public static WhileNode parse(Scanner s, BlockNode parentBlock) {
         Parser.require(Parser.OPENPAREN, "Expected open parentheses.", s);
-        ConditionNode conditionNode = ConditionNode.parse(s);
+        ConditionNode conditionNode = ConditionNode.parse(s, parentBlock);
         Parser.require(Parser.CLOSEPAREN, "Expected close parentheses.", s);
-        return new WhileNode(conditionNode, BlockNode.parse(s));
+        return new WhileNode(conditionNode, BlockNode.parse(s, parentBlock));
     }
 
     @Override

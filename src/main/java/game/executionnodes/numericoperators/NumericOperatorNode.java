@@ -1,6 +1,7 @@
 package main.java.game.executionnodes.numericoperators;
 
 import main.java.game.Robot;
+import main.java.game.executionnodes.BlockNode;
 import main.java.game.executionnodes.NumberNode;
 import main.java.parser.Parser;
 
@@ -26,7 +27,7 @@ public abstract class NumericOperatorNode extends NumberNode {
     @Override
     public abstract int getValue(Robot robot);
 
-    public static NumericOperatorNode parse(Scanner s) {
+    public static NumericOperatorNode parse(Scanner s, BlockNode parentBlock) {
         Class<? extends NumericOperatorNode> numericOperatorClass;
 
         if(Parser.checkFor(ADD, s))
@@ -43,9 +44,9 @@ public abstract class NumericOperatorNode extends NumberNode {
         }
 
         Parser.require(Parser.OPENPAREN, "Expected open parentheses.", s);
-        NumberNode number1 = NumberNode.parse(s);
+        NumberNode number1 = NumberNode.parse(s, parentBlock);
         Parser.require(Parser.COMMA, "Expected comma.", s);
-        NumberNode number2 = NumberNode.parse(s);
+        NumberNode number2 = NumberNode.parse(s, parentBlock);
         Parser.require(Parser.CLOSEPAREN, "Expected close parentheses.", s);
 
         try {
