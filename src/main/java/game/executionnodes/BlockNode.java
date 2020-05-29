@@ -7,8 +7,9 @@ import java.util.*;
 import java.util.stream.Stream;
 
 public class BlockNode implements Iterable<StatementNode>, RobotProgramNode {
-    private BlockNode parentBlock;
+    private final BlockNode parentBlock;
     private List<StatementNode> statements;
+    private final Map<String, Integer> variables = new HashMap<>();
 
     public BlockNode(BlockNode parentBlock) {
         this.parentBlock = parentBlock;
@@ -51,7 +52,20 @@ public class BlockNode implements Iterable<StatementNode>, RobotProgramNode {
         return null;
     }
 
-    public 
+    public void setVariable(String name, int value) {
+        variables.put(name, value);
+    }
+
+    public int getVariable(String name) {
+        if(variables.containsKey(name)) {
+            return variables.get(name);
+        } else {
+            if(parentBlock != null)
+                return parentBlock.getVariable(name);
+            else
+                throw new IllegalStateException("Variable must be declared before it can be used.");
+        }
+    }
 
     public List<StatementNode> getStatements() {
         return Collections.unmodifiableList(statements);
