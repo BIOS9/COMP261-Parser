@@ -100,8 +100,9 @@ public class ActionNode extends StatementNode {
 
     @Override
     public String toString() {
-        return "Action{" +
-                "action=" + action +
+        return "ActionNode{" +
+                "argument=" + argument +
+                ", action=" + action +
                 '}';
     }
 }

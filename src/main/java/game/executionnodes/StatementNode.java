@@ -22,9 +22,6 @@ public abstract class StatementNode implements RobotProgramNode {
             WHILE = Pattern.compile("while"),
             VARIABLE = Pattern.compile("$");
 
-    @Override
-    public abstract void execute(Robot robot);
-
     public static StatementNode parse(Scanner s) {
         if (Parser.checkFor(MOVE, s)) {
             return ActionNode.parse(s, ActionNode.Action.MOVE_FORWARD);
