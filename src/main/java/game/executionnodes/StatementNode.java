@@ -23,7 +23,9 @@ public abstract class StatementNode implements RobotProgramNode {
             VARIABLE = Pattern.compile("$");
 
     public static StatementNode parse(Scanner s, BlockNode parentBlock) {
-        if(s.hasNext(Parser.VARPAT)) {
+        if(s.hasNext(Parser.OPENBRACE)) {
+          return BlockNode.parse(s, parentBlock);
+        } else if(s.hasNext(Parser.VARPAT)) {
             return VariableAssignmentNode.parse(s, parentBlock);
         }  else if (Parser.checkFor(MOVE, s)) {
             return ActionNode.parse(s, ActionNode.Action.MOVE_FORWARD, parentBlock);

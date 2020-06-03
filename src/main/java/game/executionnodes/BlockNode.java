@@ -6,7 +6,7 @@ import main.java.parser.Parser;
 import java.util.*;
 import java.util.stream.Stream;
 
-public class BlockNode implements Iterable<StatementNode>, RobotProgramNode {
+public class BlockNode extends StatementNode implements Iterable<StatementNode> {
     private final BlockNode parentBlock;
     private List<StatementNode> statements;
     private final Map<String, Integer> variables = new HashMap<>();
