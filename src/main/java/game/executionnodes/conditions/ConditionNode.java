@@ -19,7 +19,9 @@ public abstract class ConditionNode {
     public abstract boolean evaluate(Robot robot);
 
     public static ConditionNode parse(Scanner s, BlockNode parentBlock) {
-        if (Parser.checkFor(EQUALS, s)) {
+        if(FixedBooleanNode.canParse(s)) {
+            return FixedBooleanNode.parse(s);
+        } else if (Parser.checkFor(EQUALS, s)) {
             return EqualsNode.parse(s, parentBlock);
         } else if (Parser.checkFor(GREATERTHAN, s)) {
             return GreaterThanNode.parse(s, parentBlock);
