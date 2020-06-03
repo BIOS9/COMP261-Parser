@@ -10,10 +10,11 @@ public class BlockNode extends StatementNode implements Iterable<StatementNode> 
     private final BlockNode parentBlock;
     private List<StatementNode> statements;
     private final Map<String, Integer> variables = new HashMap<>();
-    private final Set<String> parserVariableDeclarations = new HashSet<>();
+    private final VariableDeclarationNode parserVariableDeclarations;
 
-    public BlockNode(BlockNode parentBlock) {
+    public BlockNode(BlockNode parentBlock, VariableDeclarationNode variableDeclarations) {
         this.parentBlock = parentBlock;
+        this.parserVariableDeclarations = variableDeclarations;
     }
 
     public void setStatements(List<StatementNode> statements) {
@@ -36,10 +37,15 @@ public class BlockNode extends StatementNode implements Iterable<StatementNode> 
     }
 
     public static BlockNode parse(Scanner s, BlockNode parentBlock) {
-        BlockNode block = new BlockNode(parentBlock);
         List<StatementNode> statements = new ArrayList<>();
+        VariableDeclarationNode varDecl = null;
 
         Parser.require(Parser.OPENBRACE, "Expected open curly brace for block section.", s);
+
+        if(VariableDeclarationNode.canParse(s))
+            varDecl = VariableDeclarationNode.parse(s);
+
+        BlockNode block = new BlockNode(parentBlock, varDecl);
 
         while (s.hasNext()) {
             if (Parser.checkFor(Parser.CLOSEBRACE, s)) {
@@ -95,19 +101,13 @@ public class BlockNode extends StatementNode implements Iterable<StatementNode> 
      * Checks if a variable has declared in this or a parent block during parsing.
      */
     public boolean isParserVariableDeclared(String name) {
-        if(parserVariableDeclarations.contains(name))
+        if(parserVariableDeclarations != null && parserVariableDeclarations.isVariableDeclared(name))
             return true;
         if(parentBlock == null)
             return false;
         return parentBlock.isParserVariableDeclared(name);
     }
 
-    /**
-     * Declares a variable in this block to use during parsing.
-     */
-    public void declareParserVariable(String name) {
-        parserVariableDeclarations.add(name);
-    }
 
     public List<StatementNode> getStatements() {
         return Collections.unmodifiableList(statements);
@@ -124,8 +124,10 @@ public class BlockNode extends StatementNode implements Iterable<StatementNode> 
 
     @Override
     public String toString() {
-        return "Block{" +
-                "statements=" + statements +
+        return "BlockNode{" +
+                ", statements=" + statements +
+                ", variables=" + variables +
+                ", parserVariableDeclarations=" + parserVariableDeclarations +
                 '}';
     }
 }

@@ -2,6 +2,7 @@ package main.java.game.executionnodes;
 
 import main.java.game.Robot;
 import main.java.parser.Parser;
+import main.java.parser.ParserFailureException;
 
 import java.util.Scanner;
 
@@ -18,7 +19,6 @@ public class VariableAssignmentNode extends StatementNode {
         if(parentBlock == null)
             throw new IllegalArgumentException("Parent block cannot be null.");
 
-        parentBlock.declareParserVariable(name);
         this.name = name;
         this.number = number;
         this.parentBlock = parentBlock;
@@ -34,6 +34,8 @@ public class VariableAssignmentNode extends StatementNode {
 
     public static VariableAssignmentNode parse(Scanner s, BlockNode parentBlock) {
         String variableName = Parser.require(Parser.VARPAT, "Expected variable.", s);
+        if(!parentBlock.isParserVariableDeclared(variableName))
+            throw new ParserFailureException("Variable " + variableName + " Was not declared in this scope. Variables must be declared before they can be used.");
         Parser.require(Parser.EQUALS, "Expected variable assignment.", s);
         NumberNode number = NumberNode.parse(s, parentBlock);
         Parser.require(Parser.SEMICOLON, "Expected semicolon.", s);

@@ -28,7 +28,13 @@ public class ProgramNode implements Iterable<StatementNode>, RobotProgramNode {
     public static ProgramNode parse(Scanner s) {
         try {
             List<StatementNode> statementNodes = new ArrayList<>();
-            BlockNode block = new BlockNode(null);
+
+            VariableDeclarationNode varDecl = null;
+
+            if(VariableDeclarationNode.canParse(s))
+                varDecl = VariableDeclarationNode.parse(s);
+
+            BlockNode block = new BlockNode(null, varDecl);
 
             while (s.hasNext()) {
                 StatementNode statement = StatementNode.parse(s, block);
