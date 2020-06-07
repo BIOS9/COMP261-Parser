@@ -93,7 +93,7 @@ public class BlockNode extends StatementNode implements Iterable<StatementNode> 
             if(parentBlock != null)
                 return parentBlock.getVariable(name);
             else
-                throw new IllegalStateException("Variable must be declared before it can be used.");
+                return 0;
         }
     }
 

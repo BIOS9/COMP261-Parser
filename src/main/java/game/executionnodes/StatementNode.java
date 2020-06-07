@@ -1,7 +1,5 @@
 package main.java.game.executionnodes;
 
-import jdk.nashorn.internal.ir.Block;
-import main.java.game.Robot;
 import main.java.parser.Parser;
 
 import java.util.Scanner;
@@ -19,8 +17,7 @@ public abstract class StatementNode implements RobotProgramNode {
             SHIELDOFF = Pattern.compile("shieldOff"),
             LOOP = Pattern.compile("loop"),
             IF = Pattern.compile("if"),
-            WHILE = Pattern.compile("while"),
-            VARIABLE = Pattern.compile("$");
+            WHILE = Pattern.compile("while");
 
     public static StatementNode parse(Scanner s, BlockNode parentBlock) {
         if(s.hasNext(Parser.OPENBRACE)) {

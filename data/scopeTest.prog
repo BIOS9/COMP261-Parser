@@ -2,7 +2,7 @@ $hello;
 {
     $test;
     $test = 5;
-    $hello = 5;
+    $hello = (5);
     move;
 }
 move;

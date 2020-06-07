@@ -2,7 +2,6 @@ package main.java.game.executionnodes;
 
 import main.java.game.Robot;
 import main.java.parser.Parser;
-import org.omg.PortableInterceptor.ACTIVE;
 
 import java.util.HashSet;
 import java.util.Scanner;

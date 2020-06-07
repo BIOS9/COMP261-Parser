@@ -11,7 +11,11 @@ public abstract class NumberNode {
     public abstract int getValue(Robot robot);
 
     public static NumberNode parse(Scanner s, BlockNode parentBlock) {
-        if(s.hasNext(Parser.NUMPAT)) {
+        if(Parser.checkFor(Parser.OPENPAREN, s)) {
+            NumberNode node = NumberNode.parse(s, parentBlock);
+            Parser.require(Parser.CLOSEPAREN, "Expected closing parentheses for numeric expression.", s);
+            return node;
+        } else if(s.hasNext(Parser.NUMPAT)) {
             String value = s.next(Parser.NUMPAT);
             return new FixedNumberNode(Integer.parseInt(value));
         } else if(s.hasNext(Parser.VARPAT)) {

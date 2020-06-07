@@ -1,6 +1,6 @@
-$empty = 0;
-$thresh = 0;
+$empty,$thresh;
 while(or(gt(fuelLeft, sub(mul(div(5, add(1, 4)), -1), -1)), eq(1, 0))){
+	$numBar,$spurious;
 	shieldOff;
 	$numBar = numBarrels;
 	$spurious = add($numBar, $empty);
@@ -20,6 +20,7 @@ while(or(gt(fuelLeft, sub(mul(div(5, add(1, 4)), -1), -1)), eq(1, 0))){
 			}
 		}
 	} else{
+	$first;
 	        $first = 0;
 		if(and(eq(barrelFB(0), 0), eq(barrelLR($first), 0))){
 			takeFuel;

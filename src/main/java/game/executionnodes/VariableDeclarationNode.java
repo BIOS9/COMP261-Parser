@@ -21,11 +21,10 @@ public class VariableDeclarationNode {
     }
 
     public static boolean canParse(Scanner s) {
-        Pattern originalDelim = s.delimiter();
+        Pattern originalDelim = s.delimiter(); // Very bad I know! Dangerous mutation of the scanner, I don't care. This program is single threaded.
         s.useDelimiter("\\s+");
 
         boolean canParse = s.hasNext(DECLARATION_PATTERN);
-        System.out.println("Can parse: " + canParse);
         s.useDelimiter(originalDelim);
         return canParse;
     }
