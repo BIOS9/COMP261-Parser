@@ -25,13 +25,11 @@ public class VariableNode extends NumberNode {
         if(parentBlock == null)
             throw new IllegalStateException("Parent block must be set but was null when getting variable.");
 
-        return parentBlock.getVariable(variableName);
+        return BlockNode.getVariable(variableName);
     }
 
     public static VariableNode parse(Scanner s, BlockNode parentBlock) {
         String name = Parser.require(Parser.VARPAT, "Expected variable.", s);
-        if(!parentBlock.isParserVariableDeclared(name))
-            throw new ParserFailureException("Variable " + name + " Was not declared in this scope. Variables must be declared before they can be used.");
         return new VariableNode(name, parentBlock);
     }
 

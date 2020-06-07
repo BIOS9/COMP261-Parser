@@ -9,12 +9,10 @@ import java.util.stream.Stream;
 public class BlockNode extends StatementNode implements Iterable<StatementNode> {
     private final BlockNode parentBlock;
     private List<StatementNode> statements;
-    private final Map<String, Integer> variables = new HashMap<>();
-    private final VariableDeclarationNode parserVariableDeclarations;
+    public static final Map<String, Integer> variables = new HashMap<>();
 
-    public BlockNode(BlockNode parentBlock, VariableDeclarationNode variableDeclarations) {
+    public BlockNode(BlockNode parentBlock) {
         this.parentBlock = parentBlock;
-        this.parserVariableDeclarations = variableDeclarations;
     }
 
     public void setStatements(List<StatementNode> statements) {
@@ -38,14 +36,10 @@ public class BlockNode extends StatementNode implements Iterable<StatementNode> 
 
     public static BlockNode parse(Scanner s, BlockNode parentBlock) {
         List<StatementNode> statements = new ArrayList<>();
-        VariableDeclarationNode varDecl = null;
 
         Parser.require(Parser.OPENBRACE, "Expected open curly brace for block section.", s);
 
-        if(VariableDeclarationNode.canParse(s))
-            varDecl = VariableDeclarationNode.parse(s);
-
-        BlockNode block = new BlockNode(parentBlock, varDecl);
+        BlockNode block = new BlockNode(parentBlock);
 
         while (s.hasNext()) {
             if (Parser.checkFor(Parser.CLOSEBRACE, s)) {
@@ -60,54 +54,17 @@ public class BlockNode extends StatementNode implements Iterable<StatementNode> 
         return null;
     }
 
-    /**
-     * Overwrites variable if it has been declared in parent scope
-     * or declares it in the current scope if it has not been declared yet.
-     */
-    public void setVariable(String name, int value) {
-        if(!replaceParentVariable(name, value)) {
-            variables.put(name, value);
-        }
+    public static void setVariable(String name, int value) {
+        variables.put(name, value);
     }
 
-    /**
-     * If parent blocks contain variable, replace it up the stack
-     * If variable has not been declared above yet, return false.
-     */
-    private boolean replaceParentVariable(String name, int value) {
-        if(variables.containsKey(name)) {
-            variables.replace(name, value);
-            return true;
-        }
-
-        if(parentBlock == null)
-            return false;
-
-        return parentBlock.replaceParentVariable(name, value);
-    }
-
-    public int getVariable(String name) {
+    public static int getVariable(String name) {
         if(variables.containsKey(name)) {
             return variables.get(name);
         } else {
-            if(parentBlock != null)
-                return parentBlock.getVariable(name);
-            else
-                return 0;
+            return 0;
         }
     }
-
-    /**
-     * Checks if a variable has declared in this or a parent block during parsing.
-     */
-    public boolean isParserVariableDeclared(String name) {
-        if(parserVariableDeclarations != null && parserVariableDeclarations.isVariableDeclared(name))
-            return true;
-        if(parentBlock == null)
-            return false;
-        return parentBlock.isParserVariableDeclared(name);
-    }
-
 
     public List<StatementNode> getStatements() {
         return Collections.unmodifiableList(statements);
@@ -125,9 +82,7 @@ public class BlockNode extends StatementNode implements Iterable<StatementNode> 
     @Override
     public String toString() {
         return "BlockNode{" +
-                ", statements=" + statements +
-                ", variables=" + variables +
-                ", parserVariableDeclarations=" + parserVariableDeclarations +
+                "statements=" + statements +
                 '}';
     }
 }

@@ -1,0 +1,2 @@
+I attempted everything except infix notation in the challenge section.
+As far as I can tell everything that I attempted works.
